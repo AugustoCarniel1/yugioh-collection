@@ -1,38 +1,32 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/global/Sidebar';
 import Navbar from './components/global/Navbar';
 import Page1 from './components/pages/Page1';
 
 
-class App extends Component {
-	state = {
-		isSidebarOpen: true
+const App = () => {
+	const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+
+	const toggleSidebar = () => {
+		setIsSidebarOpen(prevState => !prevState)
 	}
 
-	toggleSidebar = () => {
-		this.setState(prevState => ({ isSidebarOpen: !prevState.isSidebarOpen }))
-	}
-
-	render() {
-		const { isSidebarOpen } = this.state
-
-		return (
-			<Router>
-				<div className="app">
-					<Sidebar isOpen={isSidebarOpen} toggleSidebar={this.toggleSidebar} />
+	return (
+		<Router>
+			<div className="app">
+				<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+				<div className={`content ${isSidebarOpen ? 'content--expanded' : 'content--collapsed'}`}>
+					<Navbar />
 					<div className={`content ${isSidebarOpen ? 'content--expanded' : 'content--collapsed'}`}>
-						<Navbar />
-						<div className={`content ${isSidebarOpen ? 'content--expanded' : 'content--collapsed'}`}>
-							<Routes>
-								<Route path="/page1" element={<Page1 />} />
-							</Routes>
-						</div>
+						<Routes>
+							<Route path="/page1" element={<Page1 />} />
+						</Routes>
 					</div>
 				</div>
-			</Router>
-		)
-	}
+			</div>
+		</Router>
+	)
 }
 
 export default App;
